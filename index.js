@@ -43,7 +43,14 @@ class Sprite {
     } else {
       this.directionChangeCooldown--;
     }
-     enemy.velocity.y = player.velocity.y
+
+    if(player.jumped && !enemy.jumped){
+      const randomDelay = (Math.random() * 800) + 200
+      setTimeout(()=>{
+        enemy.velocity.y = -12;
+        enemy.jumped = true;
+      }, randomDelay)
+    }
      enemy.velocity.x = enemy.direction * 2
   }
 
