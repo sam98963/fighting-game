@@ -9,20 +9,31 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.5;
 
 class Sprite {
-  constructor({position, velocity, direction, directionChangeDelay, jumped}){
+  constructor({position, velocity, direction, directionChangeDelay, jumped, color}){
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
+    this.width = 50;
     this.lastKey;
     this.direction = direction;
     this.directionChangeDelay = directionChangeDelay || 25;
     this.directionChangeCooldown = 0;
     this.jumped = jumped;
+    this.attackBox = {
+      position: this.position,
+      width: 100,
+      height: 50
+    };
+    this.color = color
   }
 
   draw(){
-    canvasContext.fillStyle = "red"
-    canvasContext.fillRect(this.position.x, this.position.y, 60, this.height);
+    canvasContext.fillStyle = this.color
+    canvasContext.fillRect(this.position.x, this.position.y, this.width, this.height);
+
+    // draw attackbox
+    canvasContext.fillStyle = "white"
+    canvasContext.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
   }
 
   enemyMove(){
@@ -60,7 +71,8 @@ const player = new Sprite({
     x: 0,
     y: 10,
   },
-  jumped: false
+  jumped: false,
+  color: "green"
 })
 
 const enemy = new Sprite({
@@ -72,7 +84,8 @@ const enemy = new Sprite({
       x: 0,
       y: 0,
     }, direction: -1,
-    jumped: false
+    jumped: false,
+    color: "red"
   })
 
 player.draw();
@@ -107,7 +120,13 @@ function animate(){
     player.velocity.x = 3;
   }
 
-
+  // Hit Detection
+  if(player.attackBox.position.x + player.attackBox.width >= enemy.position.x 
+    && player.attackBox.position.x <= enemy.position.x + enemy.width
+    && player.attackBox.position.y + player.attackBox.height >= enemy.position.y
+    && player.attackBox.position.y <= enemy.position.y + enemy.height){
+    console.log("hit")
+  }
 }
 
 animate();
