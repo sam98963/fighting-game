@@ -9,7 +9,7 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.5;
 
 class Sprite {
-  constructor({position, velocity, direction, directionChangeDelay}){
+  constructor({position, velocity, direction, directionChangeDelay, jumped}){
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
@@ -17,6 +17,7 @@ class Sprite {
     this.direction = direction;
     this.directionChangeDelay = directionChangeDelay || 25;
     this.directionChangeCooldown = 0;
+    this.jumped = jumped;
   }
 
   draw(){
@@ -43,6 +44,7 @@ class Sprite {
     if(this.position.y + this.height >= canvas.height){
       this.position.y = canvas.height - this.height;
       this.velocity.y = 0;
+      this.jumped = false;
     } else {
       this.velocity.y += gravity;
     }
@@ -57,7 +59,9 @@ const player = new Sprite({
   velocity: {
     x: 0,
     y: 10,
-  }})
+  },
+  jumped: false
+})
 
 const enemy = new Sprite({
   position:{
@@ -67,7 +71,8 @@ const enemy = new Sprite({
     velocity: {
       x: 0,
       y: 0,
-    }, direction: -1
+    }, direction: -1,
+    jumped: false
   })
 
 player.draw();
@@ -118,7 +123,10 @@ window.addEventListener("keydown", (e)=>{
       player.lastKey = "a";
     break;
     case "w":
+      if(!player.jumped){
       player.velocity.y = -12;
+      player.jumped = true;
+      }
     break;
   }
 })
