@@ -19,6 +19,7 @@ class Sprite {
     this.directionChangeDelay = directionChangeDelay || 25;
     this.directionChangeCooldown = 0;
     this.jumped = jumped;
+    this.isJumping = false;
     this.attackBox = {
       position: this.position,
       width: 100,
@@ -44,11 +45,13 @@ class Sprite {
       this.directionChangeCooldown--;
     }
 
-    if(player.jumped && !enemy.jumped){
-      const randomDelay = (Math.random() * 800) + 200
+    if(player.jumped && !enemy.jumped && !enemy.isJumping){
+      const randomDelay = (Math.random() * 800) 
+      enemy.isJumping = true;
       setTimeout(()=>{
         enemy.velocity.y = -12;
         enemy.jumped = true;
+        enemy.isJumping = false;
       }, randomDelay)
     }
      enemy.velocity.x = enemy.direction * 2
