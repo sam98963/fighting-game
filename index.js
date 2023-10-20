@@ -9,12 +9,14 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.5;
 
 class Sprite {
-  constructor({position, velocity, direction}){
+  constructor({position, velocity, direction, directionChangeDelay}){
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
     this.lastKey;
     this.direction = direction;
+    this.directionChangeDelay = directionChangeDelay || 25;
+    this.directionChangeCooldown = 0;
   }
 
   draw(){
@@ -23,7 +25,13 @@ class Sprite {
   }
 
   enemyMove(){
-     enemy.direction = player.position.x > enemy.position.x ? 1 : -1
+    if (this.directionChangeCooldown <= 0) {
+      enemy.direction = player.position.x > this.position.x ? 1 : -1;
+      this.directionChangeCooldown = this.directionChangeDelay;
+    } else {
+      this.directionChangeCooldown--;
+    }
+     enemy.velocity.y = player.velocity.y
      enemy.velocity.x = enemy.direction * 2
   }
 
@@ -33,6 +41,7 @@ class Sprite {
     this.position.y += this.velocity.y;
     this.position.x += this.velocity.x;
     if(this.position.y + this.height >= canvas.height){
+      this.position.y = canvas.height - this.height;
       this.velocity.y = 0;
     } else {
       this.velocity.y += gravity;
