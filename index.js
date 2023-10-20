@@ -9,11 +9,12 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.5;
 
 class Sprite {
-  constructor({position, velocity}){
+  constructor({position, velocity, direction}){
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
     this.lastKey;
+    this.direction = direction;
   }
 
   draw(){
@@ -21,8 +22,14 @@ class Sprite {
     canvasContext.fillRect(this.position.x, this.position.y, 60, this.height);
   }
 
+  enemyMove(){
+     enemy.direction = player.position.x > enemy.position.x ? 1 : -1
+     enemy.velocity.x = enemy.direction * 2
+  }
+
   update(){
     this.draw();
+    this.enemyMove();
     this.position.y += this.velocity.y;
     this.position.x += this.velocity.x;
     if(this.position.y + this.height >= canvas.height){
@@ -51,7 +58,8 @@ const enemy = new Sprite({
     velocity: {
       x: 0,
       y: 0,
-    }})
+    }, direction: -1
+  })
 
 player.draw();
 enemy.draw();
@@ -65,13 +73,7 @@ const keys = {
   },
   w : {
     pressed: false
-  },
-  ArrowLeft : {
-    pressed: false
-  },
-  ArrowRight : {
-    pressed: false
-  },
+  }
 }
 
 function animate(){
@@ -91,12 +93,7 @@ function animate(){
     player.velocity.x = 3;
   }
 
-  // Enemy Movement
-  if(keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
-    enemy.velocity.x = -3;
-  } else if(keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight"){
-    enemy.velocity.x = 3;
-  }
+
 }
 
 animate();
@@ -115,20 +112,6 @@ window.addEventListener("keydown", (e)=>{
       player.velocity.y = -12;
     break;
   }
-
-  switch(e.key) {
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      enemy.lastKey = "ArrowRight";
-    break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      enemy.lastKey = "ArrowLeft";
-    break;
-    case "ArrowUp":
-      enemy.velocity.y = -12;
-    break;
-  }
 })
 window.addEventListener("keyup", (e)=>{
   switch(e.key) {
@@ -137,16 +120,6 @@ window.addEventListener("keyup", (e)=>{
     break;
     case "a":
       keys.a.pressed = false;
-    break;
-  }
-
-  // Enemy controls
-  switch(e.key) {
-    case "ArrowRight":
-      keys.ArrowRight.pressed = false;
-    break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = false;
     break;
   }
 })
