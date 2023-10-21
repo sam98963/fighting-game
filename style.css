@@ -1,0 +1,28 @@
+#player-health{
+  background-color: green;
+  height: 30px;
+  width: 400px;
+  margin: 40px 0 0 50px;
+}
+
+#score{
+  background-color: red;
+  height: 30px;
+  width: 150px;
+  margin: 40px 50px 0 0;
+}
+
+#container{
+  position: relative;
+  width: 1024px;
+  height: 576px;
+}
+
+header{
+  width: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
