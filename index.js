@@ -30,6 +30,7 @@ class Sprite {
     };
     this.color = color,
     this.isAttacking;
+    this.attacked = false
   }
 
   draw(){
@@ -64,11 +65,12 @@ class Sprite {
     }
      enemy.velocity.x = enemy.direction * 2
 
-     if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking) {
+     if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {
+      enemy.attacked = true;
       const attackDelay = Math.random() * 3500 + 500;
       enemy.attack();
       setTimeout(() => {
-        enemy.isAttacking = false;
+        enemy.attacked = false;
       }, attackDelay);
     }
   }
@@ -180,9 +182,11 @@ function animate(){
   // Hit Detection
   if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAttacking){
     player.isAttacking = false;
+    console.log("player hit comp")
   }
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
+    console.log("comp hit player")
   }
 }
 
