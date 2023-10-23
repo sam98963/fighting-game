@@ -45,14 +45,6 @@ class Sprite {
   }
 
   enemyMove(){
-    // Is player behind or in front? Change direction accordingly, with .025s to change direction.
-    if (this.directionChangeCooldown <= 0) {
-      enemy.direction = player.position.x > this.position.x ? 1 : -1;
-      this.directionChangeCooldown = this.directionChangeDelay;
-    } else {
-      this.directionChangeCooldown--;
-    }
-
     // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
     if(player.jumped && !enemy.jumped && !enemy.isJumping){
       const randomDelay = (Math.random() * 800) 
@@ -114,7 +106,7 @@ const player = new Sprite({
   jumped: false,
   color: "green",
   offset: {
-    x: 0,
+    x: 50,
     y: 0
   }
 })
@@ -162,6 +154,26 @@ function rectangularCollision({
   )
 }
 
+function offsetAttackBox({ rectangle1, rectangle2 }) {
+  const direction = rectangle2.position.x - rectangle1.position.x > 0 ? 1 : -1;
+  if (direction !== rectangle1.direction) {
+    if (!rectangle1.isAttacking) {
+      if (direction > 0 && rectangle1 === player) {
+        rectangle1.attackBox.offset.x -= 50;
+      } else if (direction > 0 && rectangle1 === enemy){
+        rectangle1.attackBox.offset.x -= 50;
+      } else if (direction < 0 && rectangle1 === player) {
+        rectangle1.attackBox.offset.x += 50;
+      } else if (direction < 0 && rectangle1 === enemy){
+        rectangle1.attackBox.offset.x += 50;
+      }
+    }
+    rectangle1.direction = direction;
+  }
+}
+
+
+
 function animate(){
   window.requestAnimationFrame(animate)
   canvasContext.fillStyle = "black"
@@ -187,7 +199,11 @@ function animate(){
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
     console.log("comp hit player")
+    document.querySelector("#player-health").style.width = "20%"
   }
+
+  offsetAttackBox({rectangle1: player, rectangle2: enemy})
+  offsetAttackBox({rectangle1: enemy, rectangle2: player})
 }
 
 animate();
