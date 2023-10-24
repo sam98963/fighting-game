@@ -1,8 +1,26 @@
 #player-health{
   background-color: green;
   height: 30px;
-  width: 400px;
+  width: 100%;
+  transition: width 0.5s ease;
+}
+
+@keyframes borderAnimation {
+  0% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: red;
+  }
+}
+
+#health-container{
+  width: 50%;
+  height: 30px;
+  background-color: blue;
   margin: 40px 0 0 50px;
+  border: 1px solid transparent;
+  transition: border 0.2s ease;
 }
 
 #score{

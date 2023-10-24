@@ -30,7 +30,8 @@ class Sprite {
     };
     this.color = color,
     this.isAttacking;
-    this.attacked = false
+    this.attacked = false,
+    this.health = 100;
   }
 
   draw(){
@@ -55,8 +56,10 @@ class Sprite {
         enemy.isJumping = false;
       }, randomDelay)
     }
+    // Update enemy movement by direction
      enemy.velocity.x = enemy.direction * 2
 
+    // If within attacking range - attack randomly between 0.5 and 4s
      if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {
       enemy.attacked = true;
       const attackDelay = Math.random() * 3500 + 500;
@@ -198,8 +201,13 @@ function animate(){
   }
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
+    player.health -= 20
     console.log("comp hit player")
-    document.querySelector("#player-health").style.width = "20%"
+    document.querySelector("#player-health").style.width = player.health + '%';
+    document.querySelector("#health-container").style.border = '1px solid red';
+    setTimeout(() => {
+      document.querySelector("#health-container").style.border = '1px solid transparent';
+    }, 500);
   }
 
   offsetAttackBox({rectangle1: player, rectangle2: enemy})
