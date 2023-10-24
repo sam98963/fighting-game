@@ -197,7 +197,7 @@ function animate(){
   // Hit Detection
   if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAttacking){
     player.isAttacking = false;
-    console.log("player hit comp")
+    document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
   }
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
