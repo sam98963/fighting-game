@@ -1,5 +1,6 @@
 const canvas = document.querySelector("canvas");
 const canvasContext = canvas.getContext("2d");
+let gameRunning = true;
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -175,9 +176,12 @@ function offsetAttackBox({ rectangle1, rectangle2 }) {
   }
 }
 
-
+animate();
 
 function animate(){
+  if (!gameRunning) {
+    return;
+  }
   window.requestAnimationFrame(animate)
   canvasContext.fillStyle = "black"
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
@@ -204,6 +208,7 @@ function animate(){
     player.health -= 20
     console.log("comp hit player")
     document.querySelector("#player-health").style.width = player.health + '%';
+    console.log(player.health)
     document.querySelector("#health-container").style.border = '1px solid red';
     setTimeout(() => {
       document.querySelector("#health-container").style.border = '1px solid transparent';
@@ -212,9 +217,16 @@ function animate(){
 
   offsetAttackBox({rectangle1: player, rectangle2: enemy})
   offsetAttackBox({rectangle1: enemy, rectangle2: player})
+
+// End round based on health
+  if(player.health<=0){
+    gameRunning = false;
+    document.querySelector("#result").textContent = 'Computer Wins!';
+  }
+
 }
 
-animate();
+
 
 window.addEventListener("keydown", (e)=>{
   switch(e.key) {
