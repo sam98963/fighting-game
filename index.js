@@ -5,6 +5,8 @@ let gameRunning = true;
 canvas.width = 1024;
 canvas.height = 576;
 
+let currentRound = 1;
+
 canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.5;
@@ -115,22 +117,45 @@ const player = new Sprite({
   }
 })
 
-const enemy = new Sprite({
-  position:{
-    x:400,
-    y:0
+
+function initializeNewEnemy() {
+  const enemy = new Sprite({
+    position: {
+      x: 400,
+      y: 0
     },
     velocity: {
       x: 0,
-      y: 0,
-    }, direction: -1,
+      y: 0
+    },
+    direction: -1,
     jumped: false,
     color: "red",
     offset: {
       x: 50,
       y: 0
     }
-  })
+  });
+
+  enemy.velocity.x = 2 + (currentRound - 1) * 0.5;
+  enemy.health = 100 + (currentRound - 1) * 50;
+
+  return enemy;
+}
+
+
+function startNewRound() {
+  currentRound++;
+  player.health = 100;
+  player.position.x = 0;
+  player.position.y = 0;
+  player.velocity.x = 0;
+  player.jumped = false;
+
+  enemy = initializeNewEnemy(); // Initialize a new enemy
+}
+
+let enemy = initializeNewEnemy();
 
 player.draw();
 enemy.draw();
@@ -202,6 +227,13 @@ function animate(){
   if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAttacking){
     player.isAttacking = false;
     document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
+    enemy.health -= 20
+    document.querySelector("#enemy-health").style.width = enemy.health + '%';
+    console.log(enemy.health)
+    document.querySelector("#enemy-health-container").style.border = '1px solid red';
+    setTimeout(() => {
+      document.querySelector("#enemy-health-container").style.border = '1px solid transparent';
+    }, 500);
   }
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
@@ -209,9 +241,9 @@ function animate(){
     console.log("comp hit player")
     document.querySelector("#player-health").style.width = player.health + '%';
     console.log(player.health)
-    document.querySelector("#health-container").style.border = '1px solid red';
+    document.querySelector("#player-health-container").style.border = '1px solid red';
     setTimeout(() => {
-      document.querySelector("#health-container").style.border = '1px solid transparent';
+      document.querySelector("#player-health-container").style.border = '1px solid transparent';
     }, 500);
   }
 
@@ -222,6 +254,11 @@ function animate(){
   if(player.health<=0){
     gameRunning = false;
     document.querySelector("#result").textContent = 'Computer Wins!';
+  }
+
+  // Check if the player has defeated the current enemy
+  if (enemy.health <= 0) {
+    startNewRound();
   }
 
 }

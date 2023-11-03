@@ -29,7 +29,7 @@ header{
   padding: 20px;
 }
 
-#health-container{
+#player-health-container, #enemy-health-container{
   width: 50%;
   height: 30px;
   background-color: blue;
