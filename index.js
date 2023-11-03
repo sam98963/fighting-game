@@ -1,11 +1,14 @@
 const canvas = document.querySelector("canvas");
 const canvasContext = canvas.getContext("2d");
+const enemyHealthDiv = document.querySelector("#enemy-health")
+const playerHealthDiv = document.querySelector("#player-health")
 let gameRunning = true;
 
 canvas.width = 1024;
 canvas.height = 576;
 
 let currentRound = 1;
+let maxEnemyHealth = 100;
 
 canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -138,8 +141,8 @@ function initializeNewEnemy() {
   });
 
   enemy.velocity.x = 2 + (currentRound - 1) * 0.5;
-  enemy.health = 100 + (currentRound - 1) * 50;
-
+  maxEnemyHealth = 100 + (currentRound - 1) * 50;
+  enemy.health = maxEnemyHealth;
   return enemy;
 }
 
@@ -152,7 +155,9 @@ function startNewRound() {
   player.velocity.x = 0;
   player.jumped = false;
 
-  enemy = initializeNewEnemy(); // Initialize a new enemy
+  playerHealthDiv.style.width = player.health + "%"
+  enemy = initializeNewEnemy();
+  enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
 }
 
 let enemy = initializeNewEnemy();
@@ -228,7 +233,7 @@ function animate(){
     player.isAttacking = false;
     document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
     enemy.health -= 20
-    document.querySelector("#enemy-health").style.width = enemy.health + '%';
+    enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
     console.log(enemy.health)
     document.querySelector("#enemy-health-container").style.border = '1px solid red';
     setTimeout(() => {
@@ -239,7 +244,7 @@ function animate(){
     enemy.isAttacking = false;
     player.health -= 20
     console.log("comp hit player")
-    document.querySelector("#player-health").style.width = player.health + '%';
+    playerHealthDiv.style.width = player.health + '%';
     console.log(player.health)
     document.querySelector("#player-health-container").style.border = '1px solid red';
     setTimeout(() => {
