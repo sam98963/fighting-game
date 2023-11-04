@@ -65,3 +65,36 @@ header{
   flex-direction: row;
   align-items: center;
 }
+
+#countdown-container {
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 48px;
+  font-weight: bold;
+}
+#round-number-container {
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 48px;
+  font-weight: bold;
+}

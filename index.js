@@ -212,17 +212,27 @@ function offsetAttackBox({ rectangle1, rectangle2 }) {
 }
 
 animate();
+startRoundCountdown();
 
 function startRoundCountdown() {
   gameRunning = false;
   let counter = 3;
+  const countdown = document.querySelector("#countdown-container")
+  const roundNumber = document.querySelector("#round-number-container")
+  roundNumber.textContent = "Round " + currentRound + "!";
+  countdown.style.visibility = "visible";
+  roundNumber.style.visibility = "visible";
   const countdownInterval = setInterval(() => {
     counter--;
+    countdown.textContent = counter;
     if (counter === 0) {
       clearInterval(countdownInterval);
       startNewRound();
       gameRunning = true;
       animate();
+      countdown.style.visibility = "hidden";
+      roundNumber.style.visibility = "hidden";
+      countdown.textContent = 3;
     }
   }, 1000);
 }
