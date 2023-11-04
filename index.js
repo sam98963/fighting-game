@@ -270,6 +270,7 @@ function animate(){
     player.isAttacking = false;
     document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
     enemy.health -= 20
+    shakeScreen(20, 200);
     enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
     console.log(enemy.health)
     document.querySelector("#enemy-health-container").style.border = '1px solid red';
@@ -280,6 +281,7 @@ function animate(){
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
     player.health -= 20
+    shakeScreen(25, 200);
     console.log("comp hit player")
     playerHealthDiv.style.width = player.health + '%';
     console.log(player.health)
@@ -339,3 +341,40 @@ window.addEventListener("keyup", (e)=>{
     break;
   }
 })
+
+
+
+function shakeScreen(intensity, duration) {
+  const originalX = canvas.width / 2;
+  const originalY = canvas.height / 2;
+  const shakeInterval = 1000 / 60; // 60 FPS
+
+  const startTime = Date.now();
+
+  function updateShake() {
+      const currentTime = Date.now();
+      const elapsedTime = currentTime - startTime;
+
+      if (elapsedTime < duration) {
+          const xOffset = Math.random() * intensity - intensity / 2;
+          const yOffset = Math.random() * intensity - intensity / 2;
+
+
+          // Translate the canvas to create a shake effect
+          canvasContext.translate(xOffset, yOffset);
+
+          // Redraw your game elements here
+          player.draw();
+          enemy.draw();
+          // Translate back to the original position
+          canvasContext.translate(-xOffset, -yOffset);
+
+          // Request the next frame
+          requestAnimationFrame(updateShake);
+      } else {
+          // Reset the canvas to its original position
+          canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+      }
+  }
+  requestAnimationFrame(updateShake);
+}
