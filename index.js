@@ -358,18 +358,10 @@ function shakeScreen(intensity, duration) {
       if (elapsedTime < duration) {
           const xOffset = Math.random() * intensity - intensity / 2;
           const yOffset = Math.random() * intensity - intensity / 2;
-
-
-          // Translate the canvas to create a shake effect
           canvasContext.translate(xOffset, yOffset);
-
-          // Redraw your game elements here
           player.draw();
           enemy.draw();
-          // Translate back to the original position
           canvasContext.translate(-xOffset, -yOffset);
-
-          // Request the next frame
           requestAnimationFrame(updateShake);
       } else {
           // Reset the canvas to its original position
