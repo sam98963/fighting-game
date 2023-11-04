@@ -38,11 +38,13 @@ class Sprite {
     this.isAttacking;
     this.attacked = false,
     this.health = 100;
+    this.reduceHeight = false;
   }
 
   draw(){
     canvasContext.fillStyle = this.color
-    canvasContext.fillRect(this.position.x, this.position.y, this.width, this.height);
+    const adjustedHeight = this.reduceHeight ? 75 : 150;
+    canvasContext.fillRect(this.position.x, this.position.y, this.width, adjustedHeight);
 
     // draw attackbox
     if(this.isAttacking){
@@ -57,10 +59,12 @@ class Sprite {
       const randomDelay = (Math.random() * 800) 
       enemy.isJumping = true;
       setTimeout(()=>{
+        enemy.reduceHeight = true;
         enemy.velocity.y = -12;
         enemy.jumped = true;
         enemy.isJumping = false;
       }, randomDelay)
+      enemy.reduceHeight = false
     }
     // Update enemy movement by direction
      enemy.velocity.x = enemy.direction * 2
@@ -68,7 +72,7 @@ class Sprite {
     // If within attacking range - attack randomly between 0.5 and 4s
      if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {
       enemy.attacked = true;
-      const attackDelay = Math.random() * 3500 + 500;
+      const attackDelay = Math.random() * 3250 + 750;
       enemy.attack();
       setTimeout(() => {
         enemy.attacked = false;
@@ -87,6 +91,7 @@ class Sprite {
       this.position.y = canvas.height - this.height;
       this.velocity.y = 0;
       this.jumped = false;
+      this.reduceHeight = false;
     } else {
       this.velocity.y += gravity;
     }
@@ -212,6 +217,13 @@ function animate(){
   if (!gameRunning) {
     return;
   }
+
+  if(player.isJumping){
+    console.log("player jump")
+  } else if (enemy.isJumping){
+    console.log("enemy jump")
+  }
+
   window.requestAnimationFrame(animate)
   canvasContext.fillStyle = "black"
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
@@ -284,6 +296,7 @@ window.addEventListener("keydown", (e)=>{
       if(!player.jumped){
       player.velocity.y = -12;
       player.jumped = true;
+      player.reduceHeight = true;
       }
     break;
     case " ":
