@@ -213,6 +213,21 @@ function offsetAttackBox({ rectangle1, rectangle2 }) {
 
 animate();
 
+function startRoundCountdown() {
+  gameRunning = false;
+  let counter = 3;
+  const countdownInterval = setInterval(() => {
+    counter--;
+    if (counter === 0) {
+      clearInterval(countdownInterval);
+      startNewRound();
+      gameRunning = true;
+      animate();
+    }
+  }, 1000);
+}
+
+
 function animate(){
   if (!gameRunning) {
     return;
@@ -275,7 +290,7 @@ function animate(){
 
   // Check if the player has defeated the current enemy
   if (enemy.health <= 0) {
-    startNewRound();
+    startRoundCountdown();
   }
 
 }
