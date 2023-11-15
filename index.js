@@ -9,6 +9,8 @@ canvas.height = 576;
 
 let currentRound = 1;
 let maxEnemyHealth = 100;
+let lastAttackTime = 0;
+const attackCooldown = 150;
 
 canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -103,7 +105,6 @@ class Sprite {
       this.isAttacking = false
     }, 100)
   }
-
 }
 
 
@@ -325,8 +326,9 @@ window.addEventListener("keydown", (e)=>{
       }
     break;
     case " ":
-      if(!player.isJumping){
+      if(!player.isJumping && canPlayerAttack()){
         player.attack();
+        resetAttackCooldown();
       }
     break;
   }
@@ -341,6 +343,16 @@ window.addEventListener("keyup", (e)=>{
     break;
   }
 })
+
+function canPlayerAttack(){
+  const currentTime = Date.now();
+  return currentTime - lastAttackTime >= attackCooldown
+}
+
+function resetAttackCooldown(){
+  lastAttackTime = Date.now()
+}
+
 
 
 
