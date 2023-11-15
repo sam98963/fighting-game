@@ -139,10 +139,10 @@ function initializeNewEnemy() {
     direction: -1,
     jumped: false,
     color: "red",
-    offset: {
+      offset: {
       x: 50,
       y: 0
-    }
+    },
   });
 
   enemy.velocity.x = 2 + (currentRound - 1) * 0.5;
@@ -243,17 +243,15 @@ function animate(){
     return;
   }
 
-  if(player.isJumping){
-    console.log("player jump")
-  } else if (enemy.isJumping){
-    console.log("enemy jump")
-  }
-
   window.requestAnimationFrame(animate)
   canvasContext.fillStyle = "black"
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
+
   player.update()
   enemy.update()
+
+  offsetAttackBox({rectangle1: player, rectangle2: enemy})
+  offsetAttackBox({rectangle1: enemy, rectangle2: player})
 
   player.velocity.x = 0;
   enemy.velocity.x = 0;
@@ -263,6 +261,12 @@ function animate(){
     player.velocity.x = -3;
   } else if(keys.d.pressed && player.lastKey === "d"){
     player.velocity.x = 3;
+  } 
+  
+  if(player.velocity.y !== 0){
+    player.isJumping = true;
+  } else{
+    player.isJumping = false;
   }
 
   // Hit Detection
@@ -272,7 +276,6 @@ function animate(){
     enemy.health -= 20
     shakeScreen(20, 200);
     enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
-    console.log(enemy.health)
     document.querySelector("#enemy-health-container").style.border = '1px solid red';
     setTimeout(() => {
       document.querySelector("#enemy-health-container").style.border = '1px solid transparent';
@@ -282,17 +285,12 @@ function animate(){
     enemy.isAttacking = false;
     player.health -= 20
     shakeScreen(25, 200);
-    console.log("comp hit player")
     playerHealthDiv.style.width = player.health + '%';
-    console.log(player.health)
     document.querySelector("#player-health-container").style.border = '1px solid red';
     setTimeout(() => {
       document.querySelector("#player-health-container").style.border = '1px solid transparent';
     }, 500);
   }
-
-  offsetAttackBox({rectangle1: player, rectangle2: enemy})
-  offsetAttackBox({rectangle1: enemy, rectangle2: player})
 
 // End round based on health
   if(player.health<=0){
@@ -327,7 +325,9 @@ window.addEventListener("keydown", (e)=>{
       }
     break;
     case " ":
-    player.attack();
+      if(!player.isJumping){
+        player.attack();
+      }
     break;
   }
 })
