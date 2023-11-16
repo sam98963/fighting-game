@@ -217,7 +217,7 @@ function animate(){
     player.isAttacking = false;
     document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
     enemy.health -= 20
-    shakeScreen(20, 200);
+    shakeScreen(10, 200);
     enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
     document.querySelector("#enemy-health-container").style.border = '1px solid red';
     setTimeout(() => {
@@ -227,7 +227,7 @@ function animate(){
   if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
     enemy.isAttacking = false;
     player.health -= 20
-    shakeScreen(25, 200);
+    shakeScreen(12, 200);
     playerHealthDiv.style.width = player.health + '%';
     document.querySelector("#player-health-container").style.border = '1px solid red';
     setTimeout(() => {
@@ -318,6 +318,7 @@ function shakeScreen(intensity, duration) {
           const xOffset = Math.random() * intensity - intensity / 2;
           const yOffset = Math.random() * intensity - intensity / 2;
           canvasContext.translate(xOffset, yOffset);
+          background.draw()
           player.draw();
           enemy.draw();
           canvasContext.translate(-xOffset, -yOffset);
