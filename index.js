@@ -16,6 +16,14 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.5;
 
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0
+  },
+  img: "./img/jungle.jpg"
+})
+
 const player = new Fighter({
   position:{
   x:0,
@@ -181,7 +189,7 @@ function animate(){
   window.requestAnimationFrame(animate)
   canvasContext.fillStyle = "black"
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
-
+  background.update()
   player.update()
   enemy.update()
 
