@@ -16,100 +16,7 @@ canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.5;
 
-class Sprite {
-  constructor({position, velocity, direction, directionChangeDelay, jumped, color, offset}){
-    this.position = position;
-    this.velocity = velocity;
-    this.height = 150;
-    this.width = 50;
-    this.lastKey;
-    this.direction = direction;
-    this.directionChangeDelay = directionChangeDelay || 25;
-    this.directionChangeCooldown = 0;
-    this.jumped = jumped;
-    this.isJumping = false;
-    this.attackBox = {
-      position:{
-        x: this.position.x,
-        y: this.position.y
-      }, offset,
-      width: 100,
-      height: 50
-    };
-    this.color = color,
-    this.isAttacking;
-    this.attacked = false,
-    this.health = 100;
-    this.reduceHeight = false;
-  }
-
-  draw(){
-    canvasContext.fillStyle = this.color
-    const adjustedHeight = this.reduceHeight ? 75 : 150;
-    canvasContext.fillRect(this.position.x, this.position.y, this.width, adjustedHeight);
-
-    // draw attackbox
-    if(this.isAttacking){
-    canvasContext.fillStyle = "white"
-    canvasContext.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-    }
-  }
-
-  enemyMove(){
-    // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
-    if(player.jumped && !enemy.jumped && !enemy.isJumping){
-      const randomDelay = (Math.random() * 800) 
-      enemy.isJumping = true;
-      setTimeout(()=>{
-        enemy.reduceHeight = true;
-        enemy.velocity.y = -12;
-        enemy.jumped = true;
-        enemy.isJumping = false;
-      }, randomDelay)
-      enemy.reduceHeight = false
-    }
-    // Update enemy movement by direction
-     enemy.velocity.x = enemy.direction * 2
-
-    // If within attacking range - attack randomly between 0.5 and 4s
-     if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {
-      enemy.attacked = true;
-      const attackDelay = Math.random() * 3250 + 750;
-      enemy.attack();
-      setTimeout(() => {
-        enemy.attacked = false;
-      }, attackDelay);
-    }
-  }
-
-  update(){
-    this.draw();
-    this.attackBox.position.x = this.position.x - this.attackBox.offset.x
-    this.attackBox.position.y = this.position.y
-    this.enemyMove();
-    this.position.y += this.velocity.y;
-    this.position.x += this.velocity.x;
-    if(this.position.y + this.height >= canvas.height){
-      this.position.y = canvas.height - this.height;
-      this.velocity.y = 0;
-      this.jumped = false;
-      this.reduceHeight = false;
-    } else {
-      this.velocity.y += gravity;
-    }
-  }
-
-  attack(){
-    this.isAttacking = true;
-    setTimeout(()=>{
-      this.isAttacking = false
-    }, 100)
-  }
-}
-
-
-
-const player = new Sprite({
+const player = new Fighter({
   position:{
   x:0,
   y:0
@@ -128,7 +35,7 @@ const player = new Sprite({
 
 
 function initializeNewEnemy() {
-  const enemy = new Sprite({
+  const enemy = new Fighter({
     position: {
       x: 400,
       y: 0
@@ -238,6 +145,33 @@ function startRoundCountdown() {
   }, 1000);
 }
 
+function enemyMove(){
+  // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
+  if(player.jumped && !enemy.jumped && !enemy.isJumping){
+    const randomDelay = (Math.random() * 800) 
+    enemy.isJumping = true;
+    setTimeout(()=>{
+      enemy.reduceHeight = true;
+      enemy.velocity.y = -12;
+      enemy.jumped = true;
+      enemy.isJumping = false;
+    }, randomDelay)
+    enemy.reduceHeight = false
+  }
+  // Update enemy movement by direction
+   enemy.velocity.x = enemy.direction * 2
+
+  // If within attacking range - attack randomly between 0.5 and 4s
+   if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {
+    enemy.attacked = true;
+    const attackDelay = Math.random() * 3250 + 750;
+    enemy.attack();
+    setTimeout(() => {
+      enemy.attacked = false;
+    }, attackDelay);
+  }
+}
+
 
 function animate(){
   if (!gameRunning) {
@@ -303,6 +237,11 @@ function animate(){
   if (enemy.health <= 0) {
     startRoundCountdown();
   }
+
+
+  // Enemy movement
+
+  
 
 }
 
