@@ -21,7 +21,8 @@ const background = new Sprite({
     x: 0,
     y: 0
   },
-  img: "./img/jungle.jpg"
+  img: "./img/jungle.jpg",
+  scale: 0.2
 })
 
 const player = new Fighter({
