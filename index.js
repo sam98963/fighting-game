@@ -39,6 +39,13 @@ const player = new Fighter({
   offset: {
     x: 50,
     y: 0
+  },
+  img: "./img/player_sprite/Idle.png",
+  maxFrames: 8,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 180
   }
 })
 let enemy = initializeNewEnemy();

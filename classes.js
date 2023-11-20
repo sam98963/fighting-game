@@ -1,6 +1,6 @@
 
 class Sprite {
-  constructor({position, img, scale = 1, maxFrames = 1}){
+  constructor({position, img, scale = 1, maxFrames = 1, offset = {x: 0, y: 0}}){
     this.position = position;
     this.height = 150;
     this.width = 50;
@@ -11,6 +11,7 @@ class Sprite {
     this.currentFrame = 0;
     this.elapsedFrames = 0;
     this.frameDuration = 1;
+    this.offset = offset;
   }
 
   draw(){
@@ -22,8 +23,8 @@ class Sprite {
       this.img.width / this.maxFrames,
       this.img.height,
       // End
-      this.position.x,
-      this.position.y,
+      this.position.x - this.offset.x,
+      this.position.y - this.offset.y,
       (this.img.width / this.maxFrames) * this.scale,
       this.img.height * this.scale);
   }
@@ -41,13 +42,22 @@ class Sprite {
   }
 }
 
-
-
-
-
-class Fighter{
-  constructor({position, velocity, direction, directionChangeDelay, jumped, color, offset}){
-    this.position = position;
+class Fighter extends Sprite{
+  constructor({
+    position,
+    velocity,
+    direction,
+    directionChangeDelay,
+    jumped,
+    color,
+    img,
+    scale = 1,
+    maxFrames = 1,
+    offset = {x: 0, y: 0}}){
+      
+      super({
+          position, img, scale, maxFrames, offset
+      })
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
@@ -70,19 +80,25 @@ class Fighter{
     this.attacked = false,
     this.health = 100;
     this.reduceHeight = false;
+    this.currentFrame = 0;
+    this.elapsedFrames = 0;
+    this.frameDuration = 1;
   }
 
-  draw(){
-    canvasContext.fillStyle = this.color
-    const adjustedHeight = this.reduceHeight ? 75 : 150;
-    canvasContext.fillRect(this.position.x, this.position.y, this.width, adjustedHeight);
 
-    // draw attackbox
-    if(this.isAttacking){
-    canvasContext.fillStyle = "white"
-    canvasContext.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-    }
-  }
+
+
+  // draw(){
+  //   canvasContext.fillStyle = this.color
+  //   const adjustedHeight = this.reduceHeight ? 75 : 150;
+  //   canvasContext.fillRect(this.position.x, this.position.y, this.width, adjustedHeight);
+
+  //   // draw attackbox
+  //   if(this.isAttacking){
+  //   canvasContext.fillStyle = "white"
+  //   canvasContext.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+  //   }
+  // }
 
 
 
