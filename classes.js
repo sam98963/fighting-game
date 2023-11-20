@@ -1,11 +1,11 @@
 
 class Sprite {
-  constructor({position, img, scale = 1, maxFrames = 1, offset = {x: 0, y: 0}}){
+  constructor({position, imgSrc, scale = 1, maxFrames = 1, offset = {x: 0, y: 0}}){
     this.position = position;
     this.height = 150;
     this.width = 50;
     this.img = new Image();
-    this.img.src = img;
+    this.img.src = imgSrc;
     this.scale = scale;
     this.maxFrames = maxFrames;
     this.currentFrame = 0;
@@ -29,8 +29,7 @@ class Sprite {
       this.img.height * this.scale);
   }
 
-  update(){
-    this.draw();
+  animateFrames(){
     this.elapsedFrames++
     if(this.elapsedFrames % this.frameDuration === 0){
       if(this.currentFrame < this.maxFrames - 1){
@@ -39,6 +38,11 @@ class Sprite {
         this.currentFrame = 0;
       }
     }
+  }
+
+  update(){
+    this.draw();
+    this.animateFrames();
   }
 }
 
@@ -50,13 +54,14 @@ class Fighter extends Sprite{
     directionChangeDelay,
     jumped,
     color,
-    img,
+    imgSrc,
     scale = 1,
     maxFrames = 1,
-    offset = {x: 0, y: 0}}){
+    offset = {x: 0, y: 0},
+    sprites}){
       
       super({
-          position, img, scale, maxFrames, offset
+          position, imgSrc, scale, maxFrames, offset
       })
     this.velocity = velocity;
     this.height = 150;
@@ -82,7 +87,13 @@ class Fighter extends Sprite{
     this.reduceHeight = false;
     this.currentFrame = 0;
     this.elapsedFrames = 0;
-    this.frameDuration = 1;
+    this.frameDuration = 5;
+    this.sprites = sprites;
+
+    for (const sprite in this.sprites){
+      sprites[sprite].img = new Image();
+      sprites[sprite].img.src = sprites[sprite].imgSrc;
+    }
   }
 
 
@@ -104,6 +115,7 @@ class Fighter extends Sprite{
 
   update(){
     this.draw();
+    this.animateFrames();
     this.attackBox.position.x = this.position.x - this.attackBox.offset.x
     this.attackBox.position.y = this.position.y
     enemyMove();

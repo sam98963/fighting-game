@@ -21,7 +21,7 @@ const background = new Sprite({
     x: 0,
     y: 0
   },
-  img: "./img/jungle.jpg",
+  imgSrc: "./img/jungle.jpg",
   scale: 0.2
 })
 
@@ -40,12 +40,22 @@ const player = new Fighter({
     x: 50,
     y: 0
   },
-  img: "./img/player_sprite/Idle.png",
+  imgSrc: "./img/player_sprite/Idle.png",
   maxFrames: 8,
   scale: 2.5,
   offset: {
     x: 215,
     y: 180
+  },
+  sprites: {
+    idle: {
+      imgSrc: "./img/player_sprite/Idle.png",
+      maxFrames: 8
+    },
+    run: {
+      imgSrc: "./img/player_sprite/Run.png",
+      maxFrames: 8
+    }
   }
 })
 let enemy = initializeNewEnemy();
@@ -69,25 +79,27 @@ function animate(){
   if (!gameRunning) {
     return;
   }
-
   window.requestAnimationFrame(animate)
+
   canvasContext.fillStyle = "black"
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
   background.update()
   player.update()
-  enemy.update()
+  // enemy.update()
 
   offsetAttackBox({rectangle1: player, rectangle2: enemy})
   offsetAttackBox({rectangle1: enemy, rectangle2: player})
 
   player.velocity.x = 0;
   enemy.velocity.x = 0;
-
   // Player Movement
+  player.img = player.sprites.idle.img;
   if(keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -3;
+    player.img = player.sprites.run.img;
   } else if(keys.d.pressed && player.lastKey === "d"){
     player.velocity.x = 3;
+    player.img = player.sprites.run.img;
   } 
   
   if(player.velocity.y !== 0){
