@@ -55,6 +55,14 @@ const player = new Fighter({
     run: {
       imgSrc: "./img/player_sprite/Run.png",
       maxFrames: 8
+    },
+    jump: {
+      imgSrc: "./img/player_sprite/Jump.png",
+      maxFrames: 2
+    },
+    fall: {
+      imgSrc: "./img/player_sprite/Fall.png",
+      maxFrames: 2
     }
   }
 })
@@ -93,14 +101,26 @@ function animate(){
   player.velocity.x = 0;
   enemy.velocity.x = 0;
   // Player Movement
-  player.img = player.sprites.idle.img;
+
+ 
+
+
   if(keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -3;
-    player.img = player.sprites.run.img;
+    player.switchSprite("run");
   } else if(keys.d.pressed && player.lastKey === "d"){
     player.velocity.x = 3;
-    player.img = player.sprites.run.img;
-  } 
+    player.switchSprite("run");
+  } else {
+    player.switchSprite("idle");
+  }
+
+  if(player.velocity.y < 0){
+    player.switchSprite("jump");
+  } else if(player.velocity.y > 0){
+    player.switchSprite("fall")
+  }
+
   
   if(player.velocity.y !== 0){
     player.isJumping = true;
@@ -155,7 +175,7 @@ window.addEventListener("keydown", (e)=>{
     break;
     case "w":
       if(!player.jumped){
-      player.velocity.y = -12;
+      player.velocity.y = -15;
       player.jumped = true;
       player.reduceHeight = true;
       }
