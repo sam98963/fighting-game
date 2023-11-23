@@ -97,7 +97,7 @@ function animate(){
   canvasContext.fillRect(0, 0, canvas.width, canvas.height)
   background.update()
   player.update()
-  // enemy.update()
+  enemy.update()
 
   offsetAttackBox({rectangle1: player, rectangle2: enemy})
   offsetAttackBox({rectangle1: enemy, rectangle2: player})

@@ -50,6 +50,36 @@ function initializeNewEnemy() {
       x: 50,
       y: 0
     },
+    imgSrc: "./img/enemy_sprite/Idle.png",
+    maxFrames: 4,
+    scale: 2.5,
+    offset: {
+      x: 215,
+      y: 195
+    },
+    sprites: {
+      idle: {
+        imgSrc: "./img/enemy_sprite/Idle.png",
+        maxFrames: 4
+      },
+      run: {
+        imgSrc: "./img/enemy_sprite/Run.png",
+        maxFrames: 8
+      },
+      jump: {
+        imgSrc: "./img/enemy_sprite/Jump.png",
+        maxFrames: 2
+      },
+      fall: {
+        imgSrc: "./img/enemy_sprite/Fall.png",
+        maxFrames: 2
+      },
+      attack1: {
+        imgSrc: "./img/enemy_sprite/Attack1.png",
+        maxFrames: 4
+      }
+    },
+    frameDuration: 10
   });
 
   enemy.velocity.x = 2 + (currentRound - 1) * 0.5;
@@ -106,8 +136,24 @@ function enemyMove(){
     }, randomDelay)
     enemy.reduceHeight = false
   }
+
   // Update enemy movement by direction
-   enemy.velocity.x = enemy.direction * 2
+  //  enemy.velocity.x = enemy.direction * 2
+    enemy.velocity.x = 0;
+
+  //  
+   if(enemy.velocity.x < 0 ) {
+    enemy.switchSprite("run");
+  } else if(enemy.velocity.x > 0){
+    enemy.switchSprite("run");
+  }  else {
+    enemy.switchSprite("idle");
+  }
+  if(enemy.velocity.y < 0){
+    enemy.switchSprite("jump");
+  } else if(player.velocity.y > 0){
+    enemy.switchSprite("fall")
+  }
 
   // If within attacking range - attack randomly between 0.5 and 4s
    if (Math.abs(enemy.position.x - player.position.x) <= 120 && !enemy.isAttacking && !enemy.attacked) {

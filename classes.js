@@ -58,7 +58,8 @@ class Fighter extends Sprite{
     scale = 1,
     maxFrames = 1,
     offset = {x: 0, y: 0},
-    sprites}){
+    sprites,
+    frameDuration = 5}){
       
       super({
           position, imgSrc, scale, maxFrames, offset
@@ -87,7 +88,7 @@ class Fighter extends Sprite{
     this.reduceHeight = false;
     this.currentFrame = 0;
     this.elapsedFrames = 0;
-    this.frameDuration = 5;
+    this.frameDuration = frameDuration;
     this.sprites = sprites;
 
     for (const sprite in this.sprites){
@@ -136,11 +137,12 @@ class Fighter extends Sprite{
     this.isAttacking = true;
     setTimeout(()=>{
       this.isAttacking = false
+      this.switchSprite("idle")
     }, 100)
   }
 
   switchSprite(sprite){
-    if(this.img == this.sprites.attack1.img && this.currentFrame < this.sprites.attack1.maxFrames -1) return;
+    if(this.img == this.sprites.attack1.img && this.currentFrame < this.sprites.attack1.maxFrames - 1) return;
     switch(sprite){
       case "idle":
         if(this.img !== this.sprites.idle.img){
