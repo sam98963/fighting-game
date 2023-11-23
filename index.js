@@ -36,10 +36,6 @@ const player = new Fighter({
   },
   jumped: false,
   color: "green",
-  offset: {
-    x: 50,
-    y: 0
-  },
   imgSrc: "./img/player_sprite/Idle.png",
   maxFrames: 8,
   scale: 2.5,
@@ -68,6 +64,13 @@ const player = new Fighter({
       imgSrc: "./img/player_sprite/Attack1.png",
       maxFrames: 6
     }
+  },
+  attackBox: {
+    offset: {
+      x: 75,
+      y: 0
+    }, width: 160,
+    height: 120
   }
 })
 let enemy = initializeNewEnemy();
@@ -133,10 +136,10 @@ function animate(){
   }
 
   // Hit Detection
-  if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAttacking){
-    player.isAttacking = false;
+  if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAttacking && player.currentFrame === 4){
     document.querySelector("#score").textContent = +document.querySelector("#score").textContent + (Math.floor(Math.random()*5)*5 + 40)
     enemy.health -= 20
+    player.isAttacking = false
     shakeScreen(10, 200);
     enemyHealthDiv.style.width = ((enemy.health / maxEnemyHealth)*100) + "%"
     document.querySelector("#enemy-health-container").style.border = '1px solid red';
@@ -144,16 +147,25 @@ function animate(){
       document.querySelector("#enemy-health-container").style.border = '1px solid transparent';
     }, 500);
   }
-  if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking){
-    enemy.isAttacking = false;
+  if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAttacking && enemy.currentFrame === 2){
     player.health -= 20
     shakeScreen(12, 200);
+    enemy.isAttacking = false;
     playerHealthDiv.style.width = player.health + '%';
     document.querySelector("#player-health-container").style.border = '1px solid red';
     setTimeout(() => {
       document.querySelector("#player-health-container").style.border = '1px solid transparent';
     }, 500);
   }
+
+  if(player.isAttacking && player.currentFrame === 4){
+    player.isAttacking === false;
+  }
+  if(enemy.isAttacking && enemy.currentFrame === 3){
+    enemy.isAttacking === false;
+  }
+
+
 
 // End round based on health
   if(player.health<=0){

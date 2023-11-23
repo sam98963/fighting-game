@@ -59,7 +59,9 @@ class Fighter extends Sprite{
     maxFrames = 1,
     offset = {x: 0, y: 0},
     sprites,
-    frameDuration = 5}){
+    frameDuration = 5,
+    attackBox = {offset: {}, width : undefined, height: undefined}
+  }){
       
       super({
           position, imgSrc, scale, maxFrames, offset
@@ -77,9 +79,9 @@ class Fighter extends Sprite{
       position:{
         x: this.position.x,
         y: this.position.y
-      }, offset,
-      width: 100,
-      height: 50
+      }, offset: attackBox.offset,
+      width: attackBox.width,
+      height: attackBox.height
     };
     this.color = color,
     this.isAttacking;
@@ -117,8 +119,13 @@ class Fighter extends Sprite{
   update(){
     this.draw();
     this.animateFrames();
+
+    // attackbox offset
     this.attackBox.position.x = this.position.x - this.attackBox.offset.x
-    this.attackBox.position.y = this.position.y
+    this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+
+    // canvasContext.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+
     enemyMove();
     this.position.y += this.velocity.y;
     this.position.x += this.velocity.x;
@@ -135,10 +142,10 @@ class Fighter extends Sprite{
   attack(){
     this.switchSprite("attack1")
     this.isAttacking = true;
-    setTimeout(()=>{
-      this.isAttacking = false
-      this.switchSprite("idle")
-    }, 100)
+    // setTimeout(()=>{
+    //   this.isAttacking = false
+    //   this.switchSprite("idle")
+    // }, 100)
   }
 
   switchSprite(sprite){

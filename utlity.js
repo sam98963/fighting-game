@@ -79,7 +79,14 @@ function initializeNewEnemy() {
         maxFrames: 4
       }
     },
-    frameDuration: 10
+    frameDuration: 10,
+    attackBox: {
+      offset: {
+        x: 75,
+        y: 0
+      }, width: 160,
+      height: 120
+    }
   });
 
   enemy.velocity.x = 2 + (currentRound - 1) * 0.5;
@@ -111,19 +118,20 @@ function offsetAttackBox({ rectangle1, rectangle2 }) {
   if (direction !== rectangle1.direction) {
     if (!rectangle1.isAttacking) {
       if (direction > 0 && rectangle1 === player) {
-        rectangle1.attackBox.offset.x -= 50;
+        rectangle1.attackBox.offset.x -= 135;
       } else if (direction > 0 && rectangle1 === enemy){
-        rectangle1.attackBox.offset.x -= 50;
+        rectangle1.attackBox.offset.x -= 135;
       } else if (direction < 0 && rectangle1 === player) {
-        rectangle1.attackBox.offset.x += 50;
+        rectangle1.attackBox.offset.x += 135;
       } else if (direction < 0 && rectangle1 === enemy){
-        rectangle1.attackBox.offset.x += 50;
+        rectangle1.attackBox.offset.x += 135;
       }
     }
     rectangle1.direction = direction;
   }
 }
 function enemyMove(){
+  console.log(enemy.velocity.y)
   // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
   if(player.jumped && !enemy.jumped && !enemy.isJumping){
     const randomDelay = (Math.random() * 800) 
@@ -151,7 +159,7 @@ function enemyMove(){
   }
   if(enemy.velocity.y < 0){
     enemy.switchSprite("jump");
-  } else if(player.velocity.y > 0){
+  } else if(enemy.velocity.y > 0){
     enemy.switchSprite("fall")
   }
 
