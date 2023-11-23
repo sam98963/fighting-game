@@ -165,6 +165,13 @@ class Fighter extends Sprite{
           this.currentFrame = 0;
         }
         break;
+      case "runLeft":
+        if(this.img !== this.sprites.runLeft.img){
+          this.img = this.sprites.runLeft.img;
+          this.maxFrames = this.sprites.runLeft.maxFrames;
+          this.currentFrame = 0;
+        }
+        break;
       case "jump":
         if(this.img !== this.sprites.jump.img){
           this.img = this.sprites.jump.img;

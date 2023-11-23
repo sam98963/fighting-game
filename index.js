@@ -52,6 +52,10 @@ const player = new Fighter({
       imgSrc: "./img/player_sprite/Run.png",
       maxFrames: 8
     },
+    runLeft: {
+      imgSrc: "./img/player_sprite/Run-Left.png",
+      maxFrames: 8
+    },
     jump: {
       imgSrc: "./img/player_sprite/Jump.png",
       maxFrames: 2
@@ -114,7 +118,7 @@ function animate(){
 
   if(keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -3;
-    player.switchSprite("run");
+    player.switchSprite("runLeft");
   } else if(keys.d.pressed && player.lastKey === "d"){
     player.velocity.x = 3;
     player.switchSprite("run");
