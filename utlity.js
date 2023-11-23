@@ -119,20 +119,21 @@ function offsetAttackBox({ rectangle1, rectangle2 }) {
     if (!rectangle1.isAttacking) {
       if (direction > 0 && rectangle1 === player) {
         rectangle1.attackBox.offset.x -= 135;
+        enemyBehind = false
       } else if (direction > 0 && rectangle1 === enemy){
         rectangle1.attackBox.offset.x -= 135;
       } else if (direction < 0 && rectangle1 === player) {
         rectangle1.attackBox.offset.x += 135;
+        enemyBehind = true
       } else if (direction < 0 && rectangle1 === enemy){
         rectangle1.attackBox.offset.x += 135;
       }
     }
+    console.log(enemyBehind)
     rectangle1.direction = direction;
   }
 }
-function enemyMove(){
-  console.log(enemy.velocity.y)
-  // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
+function enemyMove(){  // If player has jumped, enemy has not jumped and enemy is not currently jumping --> Enemy jump at a random time between 0-0.8s
   if(player.jumped && !enemy.jumped && !enemy.isJumping){
     const randomDelay = (Math.random() * 800) 
     enemy.isJumping = true;

@@ -11,6 +11,8 @@ let currentRound = 1;
 let maxEnemyHealth = 100;
 let lastAttackTime = 0;
 const attackCooldown = 150;
+let enemyBehind = false;
+let string = ""
 
 canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -113,15 +115,19 @@ function animate(){
   enemy.velocity.x = 0;
   // Player Movement
 
- 
-
+  if(enemyBehind){
+    string = "Left"
+  } else {
+    string = ""
+  }
+  console.log(string)
 
   if(keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -3;
-    player.switchSprite("runLeft");
+    player.switchSprite(`run${string}`);
   } else if(keys.d.pressed && player.lastKey === "d"){
     player.velocity.x = 3;
-    player.switchSprite("run");
+    player.switchSprite(`run${string}`);
   } else {
     player.switchSprite("idle");
   }
